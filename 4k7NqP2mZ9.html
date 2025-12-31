@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intimacy 100 Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background-color: #111827;
+            color: #e5e7eb;
+            padding: 16px;
+            padding-bottom: 100px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header-card {
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ec4899;
+            margin-left: 8px;
+        }
+
+        .heart-icon {
+            color: #ec4899;
+            width: 28px;
+            height: 28px;
+        }
+
+        .rules-box {
+            background-color: #111827;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .rules-box h2 {
+            font-weight: bold;
+            color: #ec4899;
+            margin-bottom: 12px;
+        }
+
+        .rules-box p {
+            font-size: 14px;
+            color: #d1d5db;
+            margin-bottom: 8px;
+        }
+
+        .rules-box ul {
+            margin-left: 16px;
+            margin-bottom: 8px;
+        }
+
+        .rules-box li {
+            font-size: 14px;
+            color: #d1d5db;
+            margin-bottom: 4px;
+        }
+
+        .rules-box strong {
+            color: #ec4899;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            font-size: 14px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #9ca3af;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            background-color: #0e131d;
+            border: 1px solid #374151;
+            border-radius: 4px;
+            padding: 8px 12px;
+            color: #d1d5db;
+        }
+
+        .question-card {
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .question-text {
+            color: #e5e7eb;
+            font-weight: 500;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .response-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            overflow-x: auto;
+        }
+
+        .response-btn {
+            flex: 1;
+            min-width: 70px;
+            padding: 10px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+            cursor: pointer;
+            background-color: #374151;
+            color: #d1d5db;
+            border: 1px solid #4b5563;
+        }
+
+        .response-btn:hover {
+            background-color: #4b5563;
+        }
+
+        .response-btn.selected {
+            background-color: #db2777;
+            color: white;
+            border: 2px solid #ec4899;
+        }
+
+        .checkbox-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .checkbox-label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #374151;
+            border: 1px solid #4b5563;
+        }
+
+        .checkbox-label:hover {
+            background-color: #4b5563;
+        }
+
+        .checkbox-label.fantasy-checked {
+            background-color: #581c87;
+            border-color: #7c3aed;
+        }
+
+        .checkbox-label.tiebreaker-checked {
+            background-color: #1e3a8a;
+            border-color: #3b82f6;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-label span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #e5e7eb;
+        }
+
+        .submit-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #1f2937;
+            border-top: 1px solid #374151;
+            padding: 16px;
+        }
+
+        .submit-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .progress-text {
+            font-size: 14px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background-color: #db2777;
+            color: white;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+            border: 2px solid #ec4899;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            background-color: #be185d;
+        }
+
+        .submit-btn:disabled {
+            background-color: #4b5563;
+            border-color: #374151;
+            cursor: not-allowed;
+        }
+
+        .completion-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .completion-card {
+            max-width: 500px;
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 32px;
+            text-align: center;
+        }
+
+        .completion-card h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #ec4899;
+            margin-bottom: 16px;
+        }
+
+        .completion-card p {
+            color: #d1d5db;
+            font-size: 18px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="quizScreen" class="container">
+        <div class="header-card">
+            <div class="header-title">
+                <svg class="heart-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <h1>Intimacy 100 Quiz</h1>
+            </div>
+
+            <div class="rules-box">
+                <h2>How It Works!</h2>
+                <p>Each partner takes the same quiz separately and answers as honestly as possible!</p>
+                
+                <p style="font-weight: 600; color: #e5e7eb; margin-top: 12px;">Four Response Options:</p>
+                <ul>
+                    <li><strong>No:</strong> 🛑 I have no interest in this</li>
+                    <li><strong>Willing:</strong> 🤝 I don't get personal arousal from this, but I'm happy to do it if you want to try it because it doesn't cross a boundary for me and you enjoy it</li>
+                    <li><strong>Open:</strong> ✨ I do get some arousal from this, but I only want to try it if you want to try it</li>
+                    <li><strong>Yes:</strong> 😀 I've really been wanting to try this, let's make it happen!</li>
+                </ul>
+
+                <p style="font-weight: 600; color: #e5e7eb; margin-top: 12px;">Two Special Options:</p>
+                <ul>
+                    <li><strong>Fantasy Only:</strong> 💭 I would never do this in real life, only fantasy. If either partner checks fantasy only it'll show as fantasy only in results.</li>
+                    <li><strong>Tiebreaker:</strong> ⚖️ If both partners select "Willing" but you're still interested in discussing it, check tiebreaker. If both partners check tiebreaker it'll show in results.</li>
+                </ul>
+
+                <p style="margin-top: 12px;">After both partners have completed the quiz, a results email will be sent showing only the activities you're both interested in exploring!</p>
+            </div>
+
+            <div class="info-grid">
+                <div>
+                    <div class="info-label">Your Nickname:</div>
+                    <div class="info-value">favorite</div>
+                </div>
+                <div>
+                    <div class="info-label">Your Genitalia:</div>
+                    <div class="info-value">hole</div>
+                </div>
+                <div>
+                    <div class="info-label">Partner's Nickname:</div>
+                    <div class="info-value">sweet pea</div>
+                </div>
+                <div>
+                    <div class="info-label">Partner's Genitalia:</div>
+                    <div class="info-value">pole</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <div class="submit-bar">
+            <div class="submit-container">
+                <div class="progress-text">Progress: <span id="progressCount">0</span> / <span id="totalCount">0</span></div>
+                <button id="submitBtn" class="submit-btn" disabled>Submit Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="completionScreen" class="completion-screen hidden">
+        <div class="completion-card">
+            <svg class="heart-icon" style="margin: 0 auto 16px;" fill="currentColor" viewBox="0 0 24 24" width="48" height="48">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <h2>Results Saved!</h2>
+            <p>Ask your partner to complete their quiz! Results will be sent to your email once both partners have finished.</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        const questions = [
+            "Have longer teasing and foreplay sessions with {partner}",
+            "Have phone sex with {partner}",
+            "Masturbate in front of {partner}",
+            "Have {partner} masturbate in front of you",
+            "Help {partner} masturbate (with your hands or chest)",
+            "Masturbate with {partner}'s help (with their hands or chest)",
+            "Use a sex toy",
+            "Have missionary sex with {partner}",
+            "Have {partner} strip or give me a lap dance",
+            "Strip or give a lap dance to {partner}",
+            "Play sensual music while having sex",
+            "Have sex in front of a mirror",
+            "Wake {partner} up with sex",
+            "Have {partner} wake you up with sex",
+            "Take nudes together with {partner}",
+            "Post nudes online with {partner}",
+            "Film a sex tape together with {partner}",
+            "Post a sex tape online with {partner}",
+            "Watch porn with {partner}",
+            "Masturbate together while watching porn",
+            "Show {partner} how I like something from porn scene",
+            "Be shown what {partner} likes from porn",
+            "Curate porn for {partner} and masturbate together",
+            "Have {partner} curate porn for you and masturbate together",
+            "Have {partner} thrust his penis between my breasts",
+            "Engage in roleplay in costumes",
+            "Engage in raceplay",
+            "Wear stockings or high heels during sex",
+            "Have a 'no hands' make-out session",
+            "Sleep naked together",
+            "Have sex on the kitchen counter or table",
+            "Give {partner} a full body oil massage",
+            "Swallow {partner}'s cum",
+            "Have {partner} cum over my neck/breasts",
+            "Have {partner} cum over my face (facial)",
+            "Sit on {partner}'s face and be given oral sex",
+            "Have rougher sex",
+            "Call {partner} obscene words (bitch, slut, whore, etc)",
+            "Be called obscene words (bitch, slut, whore, etc)",
+            "Fist {partner}",
+            "Be fisted by {partner}",
+            "Try 'rimming' (oral-anal stimulation)",
+            "Have anal sex with {partner}",
+            "Experiment with urine play (watersports) in the shower",
+            "Peg {partner} with a strap-on",
+            "Watch {partner} use sex toys",
+            "Have {partner} watch me use sex toys",
+            "Use dildos or vibrators while having sex",
+            "Use nipple clamps while having sex with {partner}",
+            "Use a butt plug while having sex with {partner}",
+            "Be fingered by {partner}",
+            "Be doubly penetrated by a dildo while having sex with {partner}",
+            "Be gently choked by {partner}",
+            "Genlty choke {partner}",
+            "Engage in physical restraining (holding wrists, pinning, squirming) during sex",
+            "Have my hair pulled by {partner}",
+            "Pull {partner}'s hair",
+            "Be slapped by {partner}",
+            "Slap {partner}'s face",
+            "Be bitten by {partner}",
+            "Bite {partner}",
+            "Be submissive during sex",
+            "Be dominant during sex",
+            "Have the submissive partner be 'punished' for 'bad behavior'",
+            "Try sensory deprivation (blindfold, earplugs)",
+            "Have the submissive partner wear a collar",
+            "Experiment with edging (denial of orgasm)",
+            "Try a tantric breathing exercise together",
+            "Go commando on a date with {partner}",
+            "Engage in semi-public sex with {partner}",
+            "Engage in car sex with {partner}",
+            "Engage in public sex with {partner}",
+            "Use remote-controlled toys in public",
+            "Be commanded and denied orgasms by {partner}",
+            "Command and deny orgasms for {partner}",
+            "Roleplay rape {partner}",
+            "Be roleplay raped by {partner}",
+            "Have quiet sex in a house where others are around",
+            "Have sex in the shower",
+            "Watch other couples have sex",
+            "Let another person/people/couples watch us have sex",
+            "Watch {partner} have sex with another person",
+            "Have sex with another person while {partner} watches",
+            "Include someone you know in sex",
+            "Include another female in sex",
+            "Include another male in sex",
+            "Have sex monogamously with other couples (don't touch other couples)",
+            "Include another couple in sex (small orgy)",
+            "Participate in an large orgy",
+            "Allow {partner} a 'hall pass' for a one-night stand",
+            "Have {partner} allow you a 'hall pass' for a one-night stand",
+            "Visit a strip club together",
+            "Visit a nudist resort together",
+            "Engage in foot worship or foot play",
+            "Engage in armpit worship",
+            "Engage in belly worship",
+            "Engage in general body worship",
+            "Use restraints with silk ties or scarves",
+            "Use restraints with metal or handcuffs",
+            "Use a sex swing or sex chair with {partner}",
+        ];
+
+        // Initialize EmailJS - REPLACE THESE WITH YOUR ACTUAL VALUES AFTER SETUP
+        // Get these from: https://dashboard.emailjs.com/
+        const EMAILJS_PUBLIC_KEY = 'Z_3LbrrzZudLBDHvD';  // Replace this
+        const EMAILJS_SERVICE_ID = 'service_2aghc3e';   // Replace this
+        const EMAILJS_TEMPLATE_ID = 'template_rtijqeo'; // Replace this
+
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
+        const answers = {};
+        const partnerNickname = "sweet pea";
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            document.getElementById('totalCount').textContent = questions.length;
+            
+            questions.forEach((question, index) => {
+                const questionText = question.replace('{partner}', partnerNickname);
+                
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.innerHTML = `
+                    <h3 class="question-text">${index + 1}. ${questionText}</h3>
+                    
+                    <div class="response-buttons">
+                        <button class="response-btn" data-question="${index}" data-response="No">No</button>
+                        <button class="response-btn" data-question="${index}" data-response="Willing">Willing</button>
+                        <button class="response-btn" data-question="${index}" data-response="Open">Open</button>
+                        <button class="response-btn" data-question="${index}" data-response="Yes">Yes</button>
+                    </div>
+
+                    <div class="checkbox-row">
+                        <label class="checkbox-label" data-question="${index}" data-type="fantasy">
+                            <input type="checkbox" data-question="${index}" data-checkbox="fantasy">
+                            <span>Fantasy Only</span>
+                        </label>
+                        <label class="checkbox-label" data-question="${index}" data-type="tiebreaker">
+                            <input type="checkbox" data-question="${index}" data-checkbox="tiebreaker">
+                            <span>Tiebreaker</span>
+                        </label>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+
+            // Add event listeners for response buttons
+            document.querySelectorAll('.response-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const questionIndex = this.dataset.question;
+                    const response = this.dataset.response;
+                    
+                    // Remove selected class from all buttons for this question
+                    document.querySelectorAll(`[data-question="${questionIndex}"].response-btn`).forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked button
+                    this.classList.add('selected');
+                    
+                    // Store answer
+                    if (!answers[questionIndex]) {
+                        answers[questionIndex] = {};
+                    }
+                    answers[questionIndex].response = response;
+                    
+                    updateProgress();
+                });
+            });
+
+            // Add event listeners for checkboxes
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    const questionIndex = this.dataset.question;
+                    const checkboxType = this.dataset.checkbox;
+                    
+                    if (!answers[questionIndex]) {
+                        answers[questionIndex] = {};
+                    }
+                    answers[questionIndex][checkboxType === 'fantasy' ? 'fantasyOnly' : 'tiebreaker'] = this.checked;
+                    
+                    // Update label styling
+                    const label = this.closest('.checkbox-label');
+                    if (checkboxType === 'fantasy') {
+                        label.classList.toggle('fantasy-checked', this.checked);
+                    } else {
+                        label.classList.toggle('tiebreaker-checked', this.checked);
+                    }
+                });
+            });
+        }
+
+        function updateProgress() {
+            const completed = Object.keys(answers).filter(k => answers[k].response).length;
+            document.getElementById('progressCount').textContent = completed;
+            
+            const allAnswered = completed === questions.length;
+            document.getElementById('submitBtn').disabled = !allAnswered;
+        }
+
+        async function submitQuiz() {
+            document.getElementById('submitBtn').textContent = 'Submitting...';
+            document.getElementById('submitBtn').disabled = true;
+
+            const resultsText = `
+Intimacy 100 Quiz Results
+Your nickname: favorite
+Your genitalia: hole
+Partner's nickname: sweet pea
+Partner's genitalia: pole
+
+Responses:
+${questions.map((q, i) => {
+    const answer = answers[i] || {};
+    const response = answer.response || 'No answer';
+    const fantasy = answer.fantasyOnly ? ' [Fantasy Only]' : '';
+    const tiebreaker = answer.tiebreaker ? ' [Tiebreaker]' : '';
+    return `${i + 1}. ${q.replace('{partner}', partnerNickname)}
+   Response: ${response}${fantasy}${tiebreaker}`;
+}).join('\n\n')}
+            `.trim();
+
+            try {
+                // Send email using EmailJS
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    {
+                        to_email: 'abeauman21@gmail.com',
+                        subject: 'Intimacy 100 Quiz Results',
+                        message: resultsText
+                    }
+                );
+                
+                console.log('Email sent successfully:', response);
+                
+                // Show completion screen
+                document.getElementById('quizScreen').classList.add('hidden');
+                document.getElementById('completionScreen').classList.remove('hidden');
+            } catch (error) {
+                console.error('Error sending email:', error);
+                alert('There was an error submitting the quiz. Please try again.');
+                document.getElementById('submitBtn').textContent = 'Submit Quiz';
+                document.getElementById('submitBtn').disabled = false;
+            }
+        }
+
+        // Initialize
+        renderQuestions();
+        
+        // Check if returning from FormSubmit
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('submitted') === 'true') {
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('completionScreen').classList.remove('hidden');
+        }
+        
+        document.getElementById('submitBtn').addEventListener('click', submitQuiz);
+    </script>
+</body>
+</html>
