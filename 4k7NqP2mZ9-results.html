@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intimacy Quiz Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background-color: #111827;
+            color: #e5e7eb;
+            padding: 24px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .header-title h1 {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ec4899;
+            margin-left: 12px;
+        }
+
+        .heart-icon {
+            color: #ec4899;
+            width: 36px;
+            height: 36px;
+        }
+
+        .header p {
+            color: #d1d5db;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .header p:last-child {
+            margin-bottom: 0;
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .result-item {
+            background-color: #1f2937;
+            border: 2px solid #374151;
+            border-radius: 6px;
+            padding: 16px;
+            color: #e5e7eb;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+
+        .result-item.yes {
+            border-color: #ec4899;
+            background-color: #2d1b2e;
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+        }
+
+        .result-number {
+            color: #9ca3af;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .result-item.yes .result-number {
+            color: #ec4899;
+        }
+        
+        .result-item.suggestion {
+            border-color: #fbbf24;
+            background-color: #2d2416;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+        }
+        
+        .result-item.suggestion .result-number {
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">
+                <svg class="heart-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <h1>Your Results</h1>
+            </div>
+            <p>Activities with pink borders are your "Yes" responses</p>
+            <p>Activities with yellow borders are suggestions to spice things up</p>
+        </div>
+
+        <div class="results-grid" id="resultsContainer"></div>
+    </div>
+
+    <script>
+        const activities = [
+            { text: "Have longer teasing and foreplay sessions with sweet pea", response: "Yes", suggestion: false },
+            { text: "Have phone sex with sweet pea", response: "Yes", suggestion: false },
+            { text: "Masturbate in front of sweet pea", response: "Yes", suggestion: false },
+            { text: "Have sweet pea masturbate in front of you", response: "Yes", suggestion: false },
+            { text: "Help sweet pea masturbate (with your hands or chest)", response: "Yes", suggestion: false },
+            { text: "Masturbate with sweet pea's help (with their hands or chest)", response: "Yes", suggestion: false },
+            { text: "Use a sex toy", response: "Yes", suggestion: false },
+            { text: "Have missionary sex with sweet pea", response: "Yes", suggestion: false },
+            { text: "Have sweet pea strip or give me a lap dance", response: "Open", suggestion: true },
+            { text: "Strip or give a lap dance to sweet pea", response: "Open", suggestion: false },
+            { text: "Play sensual music while having sex", response: "Willing", suggestion: true },
+            { text: "Have sex in front of a mirror", response: "Yes", suggestion: false },
+            { text: "Wake sweet pea up with sex", response: "Yes", suggestion: false },
+            { text: "Have sweet pea wake you up with sex", response: "Yes", suggestion: false },
+            { text: "Take nudes together with sweet pea", response: "Yes", suggestion: false },
+            { text: "Film a sex tape together with sweet pea", response: "Yes", suggestion: false },
+            { text: "Watch porn with sweet pea", response: "Open", suggestion: false },
+            { text: "Masturbate together while watching porn", response: "Open", suggestion: false },
+            { text: "Show sweet pea how I like something from porn scene", response: "Open", suggestion: false },
+            { text: "Be shown what sweet pea likes from porn", response: "Yes", suggestion: false },
+            { text: "Curate porn for sweet pea and masturbate together", response: "Open", suggestion: false },
+            { text: "Have sweet pea curate porn for you and masturbate together", response: "Open", suggestion: false },
+            { text: "Have sweet pea thrust his penis between my breasts", response: "Yes", suggestion: false },
+            { text: "Engage in roleplay in costumes", response: "Yes", suggestion: false },
+            { text: "Wear stockings or high heels during sex", response: "Open", suggestion: false },
+            { text: "Have a 'no hands' make-out session", response: "Yes", suggestion: false },
+            { text: "Sleep naked together", response: "Yes", suggestion: false },
+            { text: "Have sex on the kitchen counter or table", response: "Open", suggestion: false },
+            { text: "Give sweet pea a full body oil massage", response: "Yes", suggestion: false },
+            { text: "Swallow sweet pea's cum", response: "Yes", suggestion: false },
+            { text: "Have sweet pea cum over my neck/breasts", response: "Yes", suggestion: false },
+            { text: "Have sweet pea cum over my face (facial)", response: "Yes", suggestion: false },
+            { text: "Sit on sweet pea's face and be given oral sex", response: "Yes", suggestion: false },
+            { text: "Have rougher sex", response: "Yes", suggestion: false },
+            { text: "Be called obscene words (bitch, slut, whore, etc)", response: "Yes", suggestion: false },
+            { text: "Be fisted by sweet pea", response: "Willing", suggestion: false },
+            { text: "Watch sweet pea use sex toys", response: "Willing", suggestion: false },
+            { text: "Have sweet pea watch me use sex toys", response: "Open", suggestion: false },
+            { text: "Use dildos or vibrators while having sex", response: "Yes", suggestion: false },
+            { text: "Use nipple clamps while having sex with sweet pea", response: "Open", suggestion: true },
+            { text: "Be fingered by sweet pea", response: "Yes", suggestion: false },
+            { text: "Be gently choked by sweet pea", response: "Open", suggestion: false },
+            { text: "Gently choke sweet pea", response: "Willing", suggestion: false },
+            { text: "Engage in physical restraining (holding wrists, pinning, squirming) during sex", response: "Yes", suggestion: false },
+            { text: "Have my hair pulled by sweet pea", response: "Open", suggestion: false },
+            { text: "Be submissive during sex", response: "Yes", suggestion: false },
+            { text: "Be dominant during sex", response: "Yes", suggestion: false },
+            { text: "Have the submissive partner be 'punished' for 'bad behavior'", response: "Open", suggestion: false },
+            { text: "Try sensory deprivation (blindfold, earplugs)", response: "Yes", suggestion: false },
+            { text: "Have the submissive partner wear a collar", response: "Open", suggestion: false },
+            { text: "Experiment with edging (denial of orgasm)", response: "Yes", suggestion: false },
+            { text: "Try a tantric breathing exercise together", response: "Willing", suggestion: true },
+            { text: "Go commando on a date with sweet pea", response: "Open", suggestion: false },
+            { text: "Engage in semi-public sex with sweet pea", response: "Open", suggestion: false },
+            { text: "Engage in car sex with sweet pea", response: "Willing", suggestion: false },
+            { text: "Engage in public sex with sweet pea", response: "Willing", suggestion: false },
+            { text: "Use remote-controlled toys in public", response: "Open", suggestion: true },
+            { text: "Be commanded and denied orgasms by sweet pea", response: "Yes", suggestion: false },
+            { text: "Command and deny orgasms for sweet pea", response: "Yes", suggestion: false },
+            { text: "Be roleplay raped by sweet pea", response: "Willing", suggestion: false },
+            { text: "Have quiet sex in a house where others are around", response: "Willing", suggestion: false },
+            { text: "Have sex in the shower", response: "Yes", suggestion: false },
+            { text: "Visit a strip club together", response: "Willing", suggestion: false },
+            { text: "Visit a nudist resort together", response: "Willing", suggestion: false },
+            { text: "Engage in general body worship", response: "Open", suggestion: false },
+            { text: "Use restraints with silk ties or scarves", response: "Yes", suggestion: false },
+            { text: "Use restraints with metal or handcuffs", response: "Open", suggestion: false },
+            { text: "Use a sex swing or sex chair with sweet pea", response: "Open", suggestion: true }
+        ];
+
+        const container = document.getElementById('resultsContainer');
+        
+        // Filter out "No" responses
+        const filteredActivities = activities.filter(activity => activity.response !== 'No');
+        
+        filteredActivities.forEach((activity, index) => {
+            const item = document.createElement('div');
+            const classes = ['result-item'];
+            if (activity.response === 'Yes') classes.push('yes');
+            if (activity.suggestion) classes.push('suggestion');
+            
+            item.className = classes.join(' ');
+            item.innerHTML = `<span class="result-number">${index + 1}.</span>${activity.text}`;
+            container.appendChild(item);
+        });
+    </script>
+</body>
+</html>
